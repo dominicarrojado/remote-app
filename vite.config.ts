@@ -4,25 +4,30 @@ import { federation } from '@module-federation/vite';
 import { dependencies } from './package.json';
 
 // https://vite.dev/config/
-export default defineConfig({
-  build: {
-    target: 'chrome89',
-  },
-  plugins: [
-    federation({
-      filename: 'remoteEntry.js',
-      name: 'remote',
-      exposes: {
-        './remote-app': './src/App.tsx',
-      },
-      remotes: {},
-      shared: {
-        react: {
-          requiredVersion: dependencies.react,
-          singleton: true,
+export default defineConfig(({ mode }) => {
+  const isProd = mode === 'production';
+
+  return {
+    base: isProd ? '/remote-app/' : '/',
+    build: {
+      target: 'chrome89',
+    },
+    plugins: [
+      federation({
+        filename: 'remoteEntry.js',
+        name: 'remote',
+        exposes: {
+          './remote-app': './src/App.tsx',
         },
-      },
-    }),
-    react(),
-  ],
+        remotes: {},
+        shared: {
+          react: {
+            requiredVersion: dependencies.react,
+            singleton: true,
+          },
+        },
+      }),
+      react(),
+    ],
+  };
 });
