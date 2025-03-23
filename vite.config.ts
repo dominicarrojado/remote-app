@@ -8,6 +8,7 @@ import { dependencies } from './package.json';
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
+  const isTest = mode === 'test';
 
   return {
     base: isProd ? '/remote-app/' : '/',
@@ -15,20 +16,21 @@ export default defineConfig(({ mode }) => {
       target: 'chrome89',
     },
     plugins: [
-      federation({
-        filename: 'remoteEntry.js',
-        name: 'remote',
-        exposes: {
-          './remote-app': './src/App.tsx',
-        },
-        remotes: {},
-        shared: {
-          react: {
-            requiredVersion: dependencies.react,
-            singleton: true,
+      !isTest &&
+        federation({
+          filename: 'remoteEntry.js',
+          name: 'remote',
+          exposes: {
+            './remote-app': './src/App.tsx',
           },
-        },
-      }),
+          remotes: {},
+          shared: {
+            react: {
+              requiredVersion: dependencies.react,
+              singleton: true,
+            },
+          },
+        }),
       react(),
       tailwindcss(),
     ],
@@ -53,6 +55,13 @@ export default defineConfig(({ mode }) => {
           replacement: fileURLToPath(new URL('./src/lib', import.meta.url)),
         },
       ],
+    },
+    test: {
+      browser: {
+        enabled: true,
+        provider: 'playwright',
+        instances: [{ browser: 'chromium' }],
+      },
     },
   };
 });
