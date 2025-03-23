@@ -29,6 +29,14 @@ export default defineConfig(({ mode }) => {
               requiredVersion: dependencies.react,
               singleton: true,
             },
+            '@fontsource/poppins': {
+              requiredVersion: dependencies['@fontsource/poppins'],
+              singleton: true,
+            },
+            '@fontsource/roboto': {
+              requiredVersion: dependencies['@fontsource/roboto'],
+              singleton: true,
+            },
           },
         }),
       react(),
