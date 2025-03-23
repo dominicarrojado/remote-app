@@ -1,16 +1,27 @@
 import { cn } from '@/lib/utils';
 import { HTMLProps } from 'react';
 
-function Button(props: HTMLProps<HTMLButtonElement>) {
-  const { children, ...otherProps } = props;
+const buttonVariants = {
+  outline:
+    'border-[#505050] text-[#505050] hover:bg-gray-200 active:bg-[#505050] active:text-white',
+  light: 'bg-white text-[#007C80] py-[7px] border-white',
+};
+
+type ButtonProps = HTMLProps<HTMLButtonElement> & {
+  variant?: keyof typeof buttonVariants;
+};
+
+function Button(props: ButtonProps) {
+  const { children, className, variant = 'outline', ...otherProps } = props;
 
   return (
     <button
       {...otherProps}
       type="button"
       className={cn(
-        'cursor-pointer rounded-[8px] border-[1px] border-[#505050] px-[16px] py-[3px] text-[14px] leading-[22px] font-medium text-[#505050]',
-        'hover:bg-gray-200 active:bg-[#505050] active:text-white'
+        'inline-block cursor-pointer rounded-[8px] border-[1px] px-[16px] py-[3px] font-medium',
+        buttonVariants[variant],
+        className
       )}
     >
       {children}

@@ -1,5 +1,8 @@
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
+
 export type NavItem = {
   type: 'link' | 'header' | 'divider';
+  icon?: typeof CheckCircleIcon;
   text?: string;
   href?: string;
   isExternal?: boolean;
